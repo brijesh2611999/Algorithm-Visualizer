@@ -33,6 +33,7 @@ function Signup() {
         // const url = "http://localhost:4000/api/v1/sendotp";
         const response = await fetch(url, {
             method: "POST",
+            credentials: 'include',//required
             headers: {
                 "Content-Type": "application/json",
             },

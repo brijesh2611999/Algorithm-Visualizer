@@ -30,6 +30,7 @@ function OtpVerification() {
       const url = "https://algorithm-visualizer-amx3.onrender.com/api/v1/signup";
       const response = await fetch(url, {
         method: "POST",
+        credentials: 'include',//required
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           firstName: formData.name,

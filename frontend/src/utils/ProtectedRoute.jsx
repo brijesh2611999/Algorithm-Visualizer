@@ -17,6 +17,7 @@ const ProtectedRoute = ({ children }) => {
         // const url = "http://localhost:4000/api/v1/protected";
         const res = await fetch(url, {
         method: "GET",
+        credentials: 'include',//required
           headers: {
             Authorization: `Bearer ${token}`,
           },
