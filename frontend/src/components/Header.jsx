@@ -10,9 +10,9 @@ const Header = () => {
           </h1>
         <nav>
           <ul className="flex space-x-6">
-            <li><a href="/home" className="hover:underline font-handwritten">Home</a></li>
-            <li><a href="/about" className="hover:underline font-handwritten">About</a></li>
-            <li><a href="/contact" className="hover:underline font-handwritten">Contact</a></li>
+            <li>< Link to="/home" className="hover:underline font-handwritten">Home</Link></li>
+            <li>< Link to="/about" className="hover:underline font-handwritten">About</Link></li>
+            <li>< Link to="/contact" className="hover:underline font-handwritten">Contact</Link></li>
           </ul>
         </nav>
         <div className="space-x-4">
