@@ -193,6 +193,10 @@ exports.login = async (req, res) => {
         token,
         user,
         message: `User Login Success`,
+        //new add after deploye
+        httpOnly: true,
+        secure: true, // if using HTTPS
+        sameSite: 'None' // required if secure is true
       })
       console.log(user);
     } else {
