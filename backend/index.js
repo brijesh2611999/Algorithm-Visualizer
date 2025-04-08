@@ -12,7 +12,8 @@ app.use(express.json());
 const cors = require("cors");
 app.use(
 	cors({
-		origin: "http://192.168.108.244:3000", // Replace with your frontend URL
+		// origin: "http://192.168.108.244:3000", // Replace with your frontend URL
+		origin: "https://algorithm-visualizer-one-delta.vercel.app/", // Replace with your frontend URL
 		credentials: true,
 		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow required methods
 		allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
