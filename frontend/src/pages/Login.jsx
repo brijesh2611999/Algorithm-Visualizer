@@ -44,6 +44,7 @@ function Login() {
         handleSuccess(result.message);
         //Store token after successful login
         localStorage.setItem("token", result.token);
+        // localStorage.setItem("user", JSON.stringify(result.user));
         setTimeout(() => {
           navigate("/home");
         }, 1000);

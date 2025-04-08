@@ -3,7 +3,10 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
   const [isAuthorized, setIsAuthorized] = useState(null);
+  // const storedUser = JSON.parse(localStorage.getItem("user"));
+  // const token = storedUser.token;
   const token = localStorage.getItem("token");
+  
 
   useEffect(() => {
     const verifyToken = async () => {

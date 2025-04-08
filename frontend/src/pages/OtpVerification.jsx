@@ -49,6 +49,7 @@ function OtpVerification() {
         return handleError('invalid otp');
       }
       else{
+          localStorage.setItem("username", formData.name);
           handleSuccess("Signup successful!");
           navigate("/login");
       }
