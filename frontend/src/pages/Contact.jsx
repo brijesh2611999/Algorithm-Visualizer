@@ -1,7 +1,7 @@
 import React from 'react';
 import Footer from '../components/Footer';
 
-const Contact = () => {
+function Contact(){
   
   return (
     <div className="min-h-screen flex flex-col justify-between">

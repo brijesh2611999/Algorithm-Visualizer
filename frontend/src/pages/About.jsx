@@ -1,7 +1,7 @@
 import React from 'react';
 import Footer from '../components/Footer';
 
-const About = () => {
+function About(){
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gray-100">
       <div className="container mx-auto p-6">
