@@ -13,7 +13,9 @@ const ProtectedRoute = ({ children }) => {
       }
 
       try {
-        const res = await fetch("http://localhost:4000/api/v1/protected", {
+        const url = "https://algorithm-visualizer-amx3.onrender.com/api/v1/protected";
+        // const url = "http://localhost:4000/api/v1/protected";
+        const res = await fetch(url, {
         method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
