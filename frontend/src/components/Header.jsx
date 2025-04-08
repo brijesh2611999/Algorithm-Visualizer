@@ -20,6 +20,7 @@ const Header = () => {
         const url = "https://algorithm-visualizer-amx3.onrender.com/api/v1/protected";
         const res = await fetch(url, {
           method: "GET",
+          // when you deploy then credentials include other wise api not call
           credentials: "include",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,15 +42,7 @@ const Header = () => {
     setIsAuthorized(false);
     navigate("/login");
   };
-
-  // if (isAuthorized === null) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen text-xl font-semibold text-gray-600">
-  //       Loading...
-  //     </div>
-  //   );
-  // }
-
+  
   return (
     <header className="bg-gradient-to-r from-gray-900 via-purple-800 to-black bg-[length:200%_200%] animate-gradient text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">

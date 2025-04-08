@@ -10,6 +10,8 @@ import About from './pages/About';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import OtpVerification from "./pages/OtpVerification";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 import InsertionSort from "./components/InsertionSort.jsx";
 import MergeSort from "./components/MergeSort.jsx";
@@ -22,6 +24,7 @@ import BFS from './components/BFS.jsx';
 import DFS from './components/DFS.jsx';
 
 import ProtectedRoute from './utils/ProtectedRoute.jsx'
+import OtpVerifyForgetPassword from "./pages/OtpVerifyForgetPassword.jsx";
 
 function App() {
   return (
@@ -35,6 +38,10 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/otpverification" element={<OtpVerification />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/otp-verify-forget-password" element={<OtpVerifyForgetPassword />} />
+          
 
           <Route path="/dijkstra" element={
             <ProtectedRoute>

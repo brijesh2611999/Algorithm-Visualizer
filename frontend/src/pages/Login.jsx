@@ -105,6 +105,12 @@ function Login() {
             Login
           </button>
 
+          <span className="block text-center text-gray-400">
+            Forget {" "}
+            <Link to="/forgot-password" className="text-blue-400 hover:underline">
+              Password?
+            </Link>
+          </span>
           {/* Signup Link */}
           <span className="block text-center text-gray-400">
             Don't have an account?{" "}

@@ -218,66 +218,192 @@ exports.login = async (req, res) => {
 
 
 // Controller for Changing Password
-exports.changePassword = async (req, res) => {
+// exports.changePassword = async (req, res) => {
+//   try {
+//     // Get user data from req.user
+//     const userDetails = await User.findById(req.user.id)
+//     console.log(userDetails);
+//     // Get old password, new password, and confirm new password from req.body
+//     const { oldPassword, newPassword } = req.body
+
+//     // Validate old password
+//     const isPasswordMatch = await bcrypt.compare(
+//       oldPassword,
+//       userDetails.password
+//     )
+//     if (!isPasswordMatch) {
+//       // If old password does not match, return a 401 (Unauthorized) error
+//       return res
+//         .status(401)
+//         .json({ success: false, message: "The password is incorrect" })
+//     }
+
+//     // Update password
+//     const encryptedPassword = await bcrypt.hash(newPassword, 10)
+//     const updatedUserDetails = await User.findByIdAndUpdate(
+//       req.user.id,
+//       { password: encryptedPassword },
+//       { new: true }
+//     )
+
+//     // Send notification email
+//     try {
+//       const emailResponse = await mailSender(
+//         updatedUserDetails.email,
+//         "Password for your account has been updated",
+//         passwordUpdated(
+//           updatedUserDetails.email,
+//           `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
+//         )
+//       )
+//       console.log("Email sent successfully:", emailResponse.response)
+//     } catch (error) {
+//       // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
+//       console.error("Error occurred while sending email:", error)
+//       return res.status(500).json({
+//         success: false,
+//         message: "Error occurred while sending email",
+//         error: error.message,
+//       })
+//     }
+
+//     // Return success response
+//     return res
+//       .status(200)
+//       .json({ success: true, message: "Password updated successfully" })
+//   } catch (error) {
+//     // If there's an error updating the password, log the error and return a 500 (Internal Server Error) error
+//     console.error("Error occurred while updating password:", error)
+//     return res.status(500).json({
+//       success: false,
+//       message: "Error occurred while updating password",
+//       error: error.message,
+//     })
+//   }
+// }
+
+
+// verify email
+exports.verifyEmail = async(req,res)=>{
   try {
-    // Get user data from req.user
-    const userDetails = await User.findById(req.user.id)
-    console.log(userDetails);
-    // Get old password, new password, and confirm new password from req.body
-    const { oldPassword, newPassword } = req.body
+      const {email} = req.body;
+      console.log(email);
+      const user = await User.findOne({email});
+       // If user not found with provided email
+      if (!user) {
+        // Return 401 Unauthorized status code with error message
+        return res.status(401).json({
+          success: false,
+          message: `email verification failed`,
+        })
+      }
+      var otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false,
+      })
+      const result = await Otp.findOne({ otp: otp })
+      console.log("Result is Generate OTP Func")
+      console.log("OTP", otp)
+      console.log("Result", result)
+      while (result) {
+        otp = otpGenerator.generate(6, {
+          upperCaseAlphabets: false,
+        })
+      }
+      const otpPayload = { email, otp }
+      const otpBody = await Otp.create(otpPayload)
+      console.log("OTP Body", otpBody)
+      res.status(200).json({
+        success: true,
+        message: `OTP Sent Successfully`,
+        otp,
+      })
 
-    // Validate old password
-    const isPasswordMatch = await bcrypt.compare(
-      oldPassword,
-      userDetails.password
-    )
-    if (!isPasswordMatch) {
-      // If old password does not match, return a 401 (Unauthorized) error
-      return res
-        .status(401)
-        .json({ success: false, message: "The password is incorrect" })
-    }
+  } catch (error) {
+      return res.status(401).json({
+        success:false,
+        message:'error occure while verifying email from database',
+      })
+  }
+};
 
-    // Update password
-    const encryptedPassword = await bcrypt.hash(newPassword, 10)
-    const updatedUserDetails = await User.findByIdAndUpdate(
-      req.user.id,
-      { password: encryptedPassword },
-      { new: true }
-    )
 
-    // Send notification email
-    try {
-      const emailResponse = await mailSender(
-        updatedUserDetails.email,
-        "Password for your account has been updated",
-        passwordUpdated(
-          updatedUserDetails.email,
-          `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
-        )
-      )
-      console.log("Email sent successfully:", emailResponse.response)
-    } catch (error) {
-      // If there's an error sending the email, log the error and return a 500 (Internal Server Error) error
-      console.error("Error occurred while sending email:", error)
-      return res.status(500).json({
+
+// otp verify
+exports.verifyOtp = async(req,res)=>{
+  try {
+    const {otp,email} = req.body;
+    console.log(otp);
+    console.log(email);
+    // await Otp.deleteMany({ createdAt: { $lt: new Date(Date.now() - 5 * 60 * 1000) } });
+    
+    // Find the most recent OTP for the email
+    const response = await Otp.find({ email }).sort({ createdAt: -1 }).limit(1);
+
+    // const response = await Otp.find({ email }).sort({ createdAt: -1 }).limit(1)
+    console.log(response)
+    console.log("response length",response.length);   
+    if (response.length === 0) {
+      // OTP not found for the email
+      return res.status(400).json({
         success: false,
-        message: "Error occurred while sending email",
-        error: error.message,
+        message: "OTP is not present in database",
+      })
+    } else if (otp !== response[0].otp) {
+      // Invalid OTP
+      return res.status(400).json({
+        success: false,
+        message: "OTP is wrong",
       })
     }
-
-    // Return success response
-    return res
-      .status(200)
-      .json({ success: true, message: "Password updated successfully" })
-  } catch (error) {
-    // If there's an error updating the password, log the error and return a 500 (Internal Server Error) error
-    console.error("Error occurred while updating password:", error)
-    return res.status(500).json({
-      success: false,
-      message: "Error occurred while updating password",
-      error: error.message,
+    return res.status(200).json({
+      success:true,
+      message:'otp verified successfully',
     })
+  } catch (error) {
+      return res.status(400).json({
+        success:false,
+        message:error.message,
+      });
   }
 }
+
+// Reset password controller
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+    console.log(email);
+    console.log(newPassword);
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User does not exist in database during reset password",
+      });
+    }
+
+    // Hash new password
+    const encryptedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user password
+    const updatedUserDetails = await User.findByIdAndUpdate(
+      user._id, // ✅ Corrected this line
+      { password: encryptedPassword },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
+    });
+
+  } catch (error) {
+    console.error("Reset Password Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to reset password",
+    });
+  }
+};
