@@ -16,7 +16,7 @@ function Home(){
 
         {/* Bubble sort */}
           <Link to="/bubble-sort">
-            <div className="bg-gray-100 h-52 p-4 rounded-2xl shadow-md flex-col items-center justify-center gap-3 hover:scale-105 transition">
+            <div className="bg-gray-100 h-52 p-4 rounded-2xl shadow-md flex flex-col items-center justify-center gap-3 hover:scale-105 transition">
             <SortAsc className="w-10 h-10 text-blue-500" />
             <p className="text-lg font-semibold">Bubble Sort</p>
             </div>
